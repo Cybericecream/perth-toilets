@@ -1,0 +1,67 @@
+networks:
+  portfolio-frontend-network:
+    name: portfolio-frontend-network
+  portfolio-backend-network:
+    name: portfolio-backend-network
+
+volumes:
+  database:
+
+services:
+  proxy:
+    container_name: portfolio_proxy
+    volumes:
+      - ./infra/nginx.conf:ro
+    image: nginx:1.21
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - portfolio-frontend-network
+    ports:
+      - "8080:80"
+    environment:
+      - NGINX_PORT=80
+
+  frontend:
+    container_name: portfolio_frontend
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    build:
+      context: .
+      dockerfile: infra/docker/frontend.Dockerfile
+    networks:
+      - portfolio-frontend-network
+    expose:
+      - 3000
+
+  backend:
+    container_name: portfolio_backend
+    working_dir: /app
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    build:
+      context: .
+      dockerfile: infra/docker/backend.Dockerfile
+    depends_on:
+      - db
+    networks:
+      - portfolio-frontend-network
+      - portfolio-backend-network
+    expose:
+      - 3000
+
+  db: 
+    volumes:
+      - database:/var/lib/mysql
+    image: mariadb:latest
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+    networks:
+      - portfolio-frontend-network
+      - portfolio-backend-network
+    ports:
+      - 13306:3306

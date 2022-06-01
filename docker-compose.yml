@@ -11,7 +11,7 @@ services:
   proxy:
     container_name: portfolio_proxy
     volumes:
-      - ./infra/nginx.conf:ro
+      - ./infra/nginx.conf:/etc/nginx/conf.d/portfolio.conf:ro
     image: nginx:1.21
     depends_on:
       - frontend
@@ -28,7 +28,7 @@ services:
     working_dir: /app
     volumes:
       - ./frontend:/app
-      - /app/node_modules
+      # - /app/node_modules
     build:
       context: .
       dockerfile: infra/docker/frontend.Dockerfile

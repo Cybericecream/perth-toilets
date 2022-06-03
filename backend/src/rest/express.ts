@@ -1,9 +1,12 @@
 import express, { Application, Request, Response } from "express";
+import {authRoutes} from "./auth/auth-routes";
 
-export const server = () => {
+export const server = async () => {
     const app: Application = express();
 
     app.use(express.json());
+
+    app.use("/auth", await authRoutes())
 
     app.get("/", (req: Request, res: Response) => {
         console.log(req);

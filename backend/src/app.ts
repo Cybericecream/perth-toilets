@@ -1,3 +1,7 @@
-import {server} from "./rest/express"
+import {server} from "./rest/express";
+import {Ledger} from "./data/mariadb/pool";
 
-server()
+const ledger = new Ledger();
+console.log(ledger.connection.totalCount);
+
+server();

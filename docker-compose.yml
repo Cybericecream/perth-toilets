@@ -42,26 +42,40 @@ services:
     working_dir: /app
     volumes:
       - ./backend:/app
-      - /app/node_modules
+      # - /app/node_modules
     build:
       context: .
       dockerfile: infra/docker/backend.Dockerfile
     depends_on:
       - db
+    environment:
+      - dbHost=db
+      - dbPort=5432
+      - dbUser=postgres
+      - dbPass=S3TtM9kbobM7iLnP
+      - dbSchema=perth-toilets
+      - connectionLimits=100
     networks:
       - portfolio-frontend-network
       - portfolio-backend-network
     expose:
       - 3000
 
-  db: 
-    volumes:
-      - database:/var/lib/mysql
-    image: mariadb:latest
+  db:
+    image: postgres:14.2-alpine
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      - POSTGRES_PASSWORD=S3TtM9kbobM7iLnP
     networks:
-      - portfolio-frontend-network
       - portfolio-backend-network
     ports:
-      - 13306:3306
+      - 5432:5432
+
+  flyway:
+    image: flyway/flyway
+    volumes:
+      - ./db/migrations:/flyway/sql
+    command: -url=jdbc:postgresql://db:5432/ -schemas=perth-toilets -user=postgres -password=S3TtM9kbobM7iLnP -connectRetries=60 migrate
+    networks:
+      - portfolio-backend-network
+    depends_on:
+      - db

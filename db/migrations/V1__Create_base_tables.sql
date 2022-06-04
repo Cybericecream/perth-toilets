@@ -17,8 +17,8 @@ CREATE TABLE users_passwords
     user_id          UUID         NOT NULL,
     password_version INTEGER      NOT NULL,
     created_at       TIMESTAMP    NOT NULL DEFAULT NOW(),
-    UNIQUE (password_id, password_value),
-    UNIQUE (password_id, password_version)
+    UNIQUE (user_id, password_value),
+    UNIQUE (user_id, password_version)
 );
 
 CREATE TABLE users_session
@@ -31,8 +31,8 @@ CREATE TABLE users_session
 
 CREATE TABLE users_roles
 (
-    user_id UUID        NOT NULL,
-    role    varchar(64) NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    users_roles_version INTEGER NOT NULL
+    user_id             UUID        NOT NULL,
+    role                varchar(64) NOT NULL,
+    created_at          TIMESTAMP   NOT NULL DEFAULT NOW(),
+    users_roles_version INTEGER     NOT NULL
 )

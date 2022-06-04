@@ -41,3 +41,14 @@ export class DuplicatedUserPassword extends Error {
         this.name = this.constructor.name;
     }
 }
+
+export class IncorrectPassword extends Error {
+    readonly name: string;
+
+    constructor(
+        message?: string
+    ) {
+        super(message);
+        this.name = this.constructor.name;
+    }
+}

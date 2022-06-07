@@ -1,19 +1,20 @@
 import {sign, verify} from "jsonwebtoken";
 import {JwtInterface} from "../domain/interfaces/jwt-interface";
+import {JwtEnvVariables} from "./envValidator";
 
 export class JwtVerify implements JwtInterface{
-    constructor() {
+    constructor(private readonly jwtEnv: JwtEnvVariables) {
     }
 
     generateSessionToken = (data, expiry: Date): string => {
         return sign({
             exp: expiry,
             data: data
-        }, 'salt');
+        }, this.jwtEnv.jwtSalt);
     }
 
     verifySessionToken = (sessionToken: string) => {
-        return verify(sessionToken, 'salt');
+        return verify(sessionToken, this.jwtEnv.jwtSalt);
     }
 
 }

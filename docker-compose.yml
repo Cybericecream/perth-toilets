@@ -48,7 +48,7 @@ services:
       dockerfile: infra/docker/backend.Dockerfile
     depends_on:
       - db
-
+    env_file: backend.env
     networks:
       - portfolio-frontend-network
       - portfolio-backend-network

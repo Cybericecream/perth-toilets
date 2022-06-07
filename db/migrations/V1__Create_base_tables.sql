@@ -23,9 +23,9 @@ CREATE TABLE users_passwords
 
 CREATE TABLE users_session
 (
-    session_token VARCHAR(128) NOT NULL,
+    session_token VARCHAR(256) NOT NULL,
     user_id       UUID         NOT NULL,
-    expires_at    TIMESTAMP    NOT NULL,
+    expires_at    VARCHAR(256) NOT NULL,
     created_at    TIMESTAMP    NOT NULL DEFAULT NOW()
 );
 

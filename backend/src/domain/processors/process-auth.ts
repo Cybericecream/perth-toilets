@@ -1,5 +1,5 @@
 import {LoginCommand} from "../commands/auth-command";
-import {LatestUserPassword, LoginPasswordResponse, NewUserSession, User} from "../interfaces/auth-interfaces";
+import {LatestUserPassword, NewUserSession, User} from "../interfaces/auth-interfaces";
 import {Hasher} from "../interfaces/hash-interface";
 import {IncorrectPassword} from "../errors/auth-errors";
 import {JwtInterface} from "../interfaces/jwt-interface";

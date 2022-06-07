@@ -4,7 +4,6 @@ import {
     User,
     UserPassword,
     UserRole,
-    UserSession
 } from "../../../domain/interfaces/auth-interfaces";
 import {
     UserRepository,
@@ -152,7 +151,7 @@ export class AuthRepositories implements UserRepository, UserSessionRepository {
         }
     }
 
-    loadUserSession = async (sessionToken: string): Promise<UserSession> => {
+    loadUserSession = async (sessionToken: string): Promise<NewUserSession> => {
         const session = await this.ledger.connection.query(`
                     SELECT users_session.user_id, users_session.session_token, users_session.expires_at
                     FROM postgres."perth-toilets".users_session as users_session

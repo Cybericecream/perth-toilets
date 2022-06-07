@@ -1,18 +1,19 @@
 import {Pool} from "pg";
+import {DbEnvVariables} from "../../utils/envValidator";
 
 export class Ledger {
     public connection: Pool;
 
     constructor(
-
+        private readonly dbEnv: DbEnvVariables
     ) {
         this.connection = new Pool({
-            host: process.env.dbHost,
-            port: Number(process.env.dbPort),
-            database: process.env.dbDatabase,
-            user: process.env.dbUser,
-            password: process.env.dbPass,
-            max: Number(process.env.connectionLimits)
+            host: this.dbEnv.dbHost,
+            port: this.dbEnv.dbPort,
+            database: this.dbEnv.dbDatabase,
+            user: this.dbEnv.dbUser,
+            password: this.dbEnv.dbPass,
+            max: this.dbEnv.dbMaxConnections
         })
     }
 }

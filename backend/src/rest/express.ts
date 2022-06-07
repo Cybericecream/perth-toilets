@@ -1,7 +1,8 @@
 import express, { Application, Request, Response } from "express";
 import {authRoutes} from "./auth/auth-routes";
+import {ServerEnvVariables} from "../utils/envValidator";
 
-export const server = async () => {
+export const server = async (serverEnv: ServerEnvVariables) => {
     const app: Application = express();
 
     app.use(express.json());
@@ -14,7 +15,7 @@ export const server = async () => {
       })
 
     try {
-        app.listen(3000, (): void => {
+        app.listen(serverEnv.projectPort, (): void => {
             console.log(`Server Successfully Started.`)
         });
     } catch(err) {

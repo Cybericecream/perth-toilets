@@ -45,7 +45,7 @@ export class JetEnvValidator implements JwtEnvVariables {
     public readonly jwtSalt: string;
 
     constructor() {
-        this.jwtSalt = validateEnvString('salt');
+        this.jwtSalt = validateEnvString('jwtSalt');
     }
 
 }

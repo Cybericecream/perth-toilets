@@ -152,14 +152,13 @@ export class AuthRepositories implements UserRepository, UserSessionRepository {
         }
     }
 
-    loadUserSession = async (userId: string, sessionToken: string): Promise<UserSession> => {
+    loadUserSession = async (sessionToken: string): Promise<UserSession> => {
         const session = await this.ledger.connection.query(`
                     SELECT users_session.user_id, users_session.session_token, users_session.expires_at
                     FROM postgres."perth-toilets".users_session as users_session
-                    WHERE users_session.user_id = $1
-                      AND users_session.session_token = $2;
+                    WHERE users_session.session_token = $1;
             `,
-            [userId, sessionToken]
+            [sessionToken]
         );
         if (session.rows.length === 0) {
             throw new NoSessionFound();
@@ -174,11 +173,25 @@ export class AuthRepositories implements UserRepository, UserSessionRepository {
     saveUserSession = async (userSession: NewUserSession): Promise<void> => {
         try {
             await this.ledger.connection.query(`
-                INSERT INTO postgres."perth-toilets".users_session
-                    (session_token, user_id, expires_at, created_at)
-                VALUES ($1, $2, $3, DEFAULT)
-            `,
+                        INSERT INTO postgres."perth-toilets".users_session
+                            (session_token, user_id, expires_at, created_at)
+                        VALUES ($1, $2, $3, DEFAULT)
+                `,
                 [userSession.sessionToken, userSession.userId, userSession.expiry]
+            );
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    deleteUserSession = async (sessionToken: string): Promise<void> => {
+        try {
+            await this.ledger.connection.query(`
+                        DELETE
+                        FROM postgres."perth-toilets".users_session as users_session
+                        WHERE users_session.session_token = $1;
+                `,
+                [sessionToken]
             );
         } catch (err) {
             throw err;

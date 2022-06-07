@@ -1,5 +1,5 @@
 import {UserRepository, UserSessionRepository} from "./interfaces/auth-repository-interfaces";
-import {LoginCommand} from "./commands/auth-command";
+import {LoginCommand, LogoutCommand} from "./commands/auth-command";
 import {LoginPasswordResponse} from "./interfaces/auth-interfaces";
 import {processLogin} from "./processors/process-auth";
 import {Hasher} from "./interfaces/hash-interface";
@@ -25,4 +25,8 @@ export class AuthUserPasswordCommandHandler {
         }
     }
 
+    handleLogout = async (logoutCommand: LogoutCommand): Promise<void> => {
+        const userSession = await this.sessionRepository.loadUserSession(logoutCommand.sessionToken);
+        await this.sessionRepository.deleteUserSession(logoutCommand.sessionToken);
+    }
 }

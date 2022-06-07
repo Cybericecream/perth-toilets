@@ -26,7 +26,7 @@ export class AuthUserPasswordCommandHandler {
     }
 
     handleLogout = async (logoutCommand: LogoutCommand): Promise<void> => {
-        const userSession = await this.sessionRepository.loadUserSession(logoutCommand.sessionToken);
+        await this.sessionRepository.loadUserSession(logoutCommand.sessionToken);
         await this.sessionRepository.deleteUserSession(logoutCommand.sessionToken);
     }
 }

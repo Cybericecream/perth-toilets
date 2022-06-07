@@ -1,4 +1,4 @@
-import {LatestUserPassword, User, UserPassword, UserRole, UserSession} from "./auth-interfaces";
+import {LatestUserPassword, NewUserSession, User, UserPassword, UserRole, UserSession} from "./auth-interfaces";
 
 export interface UserRepository {
     loadUserById: (userId: string) => Promise<User>;
@@ -12,5 +12,5 @@ export interface UserRepository {
 
 export interface UserSessionRepository {
     loadUserSession: (userId: string, sessionToken: string) => Promise<UserSession>;
-    saveUserSession: (userSession: UserSession) => Promise<void>;
+    saveUserSession: (newUserSession: NewUserSession) => Promise<void>;
 }

@@ -1,6 +1,6 @@
 import {Ledger} from "../pool";
 import {
-    LatestUserPassword,
+    LatestUserPassword, NewUserSession,
     User,
     UserPassword,
     UserRole,
@@ -171,7 +171,7 @@ export class AuthRepositories implements UserRepository, UserSessionRepository {
         }
     }
 
-    saveUserSession = async (userSession: UserSession): Promise<void> => {
+    saveUserSession = async (userSession: NewUserSession): Promise<void> => {
         try {
             await this.ledger.connection.query(`
                 INSERT INTO postgres."perth-toilets".users_session

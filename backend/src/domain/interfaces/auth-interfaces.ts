@@ -39,5 +39,10 @@ export interface UserRole {
 export interface UserSession {
     userId: string,
     sessionToken: string,
+}
+
+export interface NewUserSession {
+    userId: string,
+    sessionToken: string,
     expiry: string,
 }

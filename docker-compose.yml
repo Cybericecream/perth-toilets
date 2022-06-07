@@ -48,13 +48,7 @@ services:
       dockerfile: infra/docker/backend.Dockerfile
     depends_on:
       - db
-    environment:
-      - dbHost=db
-      - dbPort=5432
-      - dbUser=postgres
-      - dbPass=S3TtM9kbobM7iLnP
-      - dbSchema=perth-toilets
-      - connectionLimits=100
+
     networks:
       - portfolio-frontend-network
       - portfolio-backend-network

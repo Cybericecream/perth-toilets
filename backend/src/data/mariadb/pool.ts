@@ -10,7 +10,6 @@ export class Ledger {
         this.connection = new Pool({
             host: this.dbEnv.dbHost,
             port: this.dbEnv.dbPort,
-            database: this.dbEnv.dbDatabase,
             user: this.dbEnv.dbUser,
             password: this.dbEnv.dbPass,
             max: this.dbEnv.dbMaxConnections

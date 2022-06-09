@@ -27,9 +27,9 @@ export class DbEnvValidator implements DbEnvVariables {
         this.dbHost = validateEnvString('dbHost');
         this.dbUser = validateEnvString('dbUser');
         this.dbPass = validateEnvString('dbPass');
-        this.dbDatabase = validateEnvString('dbDatabase');
+        this.dbDatabase = validateEnvString('dbSchema');
         this.dbPort = validateEnvNumber('dbPort');
-        this.dbMaxConnections = validateEnvNumber('dbMaxConnections');
+        this.dbMaxConnections = validateEnvNumber('connectionLimits');
     }
 }
 

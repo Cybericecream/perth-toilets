@@ -13,5 +13,6 @@ export interface UserRepository {
 export interface UserSessionRepository {
     loadUserSession: (sessionToken: string) => Promise<UserSession>;
     saveUserSession: (newUserSession: NewUserSession) => Promise<void>;
+    updateUserSession: (userSession: string, expiry: string) => Promise<void>;
     deleteUserSession: (userSession: string) => Promise<void>;
 }

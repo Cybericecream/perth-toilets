@@ -18,7 +18,7 @@ export const errorHandler: ErrorRequestHandler = async (err, req, res, next) => 
             })
         case 'NoSessionFound':
             return res.status(401).json({
-                error: "Login."
+                error: "Logged Out."
             })
         default:
             return res.status(500).json({

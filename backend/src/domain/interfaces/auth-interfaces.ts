@@ -1,3 +1,5 @@
+import {Request} from "express";
+
 export enum Role {
     admin = "admin",
     generalUser = "general_user"
@@ -45,4 +47,8 @@ export interface NewUserSession {
     userId: string,
     sessionToken: string,
     expiry: string,
+}
+
+export interface AuthRequest extends Request {
+    session: UserSession;
 }

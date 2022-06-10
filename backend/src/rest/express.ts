@@ -5,11 +5,7 @@ import {AuthUserPasswordCommandHandler} from "../domain/auth-command-handler";
 import {errorHandler} from "./middleware/error-handler";
 import {validateString} from "../domain/utils/validate-values";
 import {ValidateSessionCommand} from "../domain/commands/auth-command";
-import {UserSession} from "../domain/interfaces/auth-interfaces";
-
-interface AuthRequest extends Request {
-    session: UserSession;
-}
+import {AuthRequest} from "../domain/interfaces/auth-interfaces";
 
 export const server = async (serverEnv: ServerEnvVariables, authUserPasswordCommandHandler: AuthUserPasswordCommandHandler) => {
     const app: Application = express();

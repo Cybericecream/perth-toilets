@@ -7,12 +7,6 @@ import {Hash} from "../../utils/hash";
 export const authRoutes = async (authUserPasswordCommandHandler: AuthUserPasswordCommandHandler): Promise<Router> => {
     const router = Router()
 
-    router.post("/", (req: Request, res: Response) => {
-        const hash = new Hash();
-        const {password} = req.body;
-        res.status(200).json(hash.hashPassword(password));
-      });
-
     router.post("/login", async (req: Request, res: Response, next: NextFunction) => {
         try {
             const {email, password} = req.body;

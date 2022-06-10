@@ -2,7 +2,6 @@ import {Router, Request, Response, NextFunction} from "express";
 import {AuthUserPasswordCommandHandler} from "../../domain/auth-command-handler";
 import {LoginCommand, LogoutCommand} from "../../domain/commands/auth-command";
 import {validateString} from "../../domain/utils/validate-values";
-import {Hash} from "../../utils/hash";
 
 export const authRoutes = async (authUserPasswordCommandHandler: AuthUserPasswordCommandHandler): Promise<Router> => {
     const router = Router()

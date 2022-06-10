@@ -1,7 +1,7 @@
 import {UserRepository, UserSessionRepository} from "./interfaces/auth-repository-interfaces";
-import {LoginCommand, LogoutCommand} from "./commands/auth-command";
-import {LoginPasswordResponse} from "./interfaces/auth-interfaces";
-import {processLogin} from "./processors/process-auth";
+import {LoginCommand, LogoutCommand, ValidateSessionCommand} from "./commands/auth-command";
+import {LoginPasswordResponse, UserSession} from "./interfaces/auth-interfaces";
+import {processLogin, processValidSession} from "./processors/process-auth";
 import {Hasher} from "./interfaces/hash-interface";
 import {JwtInterface} from "./interfaces/jwt-interface";
 
@@ -28,5 +28,12 @@ export class AuthUserPasswordCommandHandler {
     handleLogout = async (logoutCommand: LogoutCommand): Promise<void> => {
         await this.sessionRepository.loadUserSession(logoutCommand.sessionToken);
         await this.sessionRepository.deleteUserSession(logoutCommand.sessionToken);
+    }
+
+    handleValidSession = async (validateSessionCommand: ValidateSessionCommand): Promise<UserSession> => {
+        const loadedSession = await this.sessionRepository.loadUserSession(validateSessionCommand.sessionToken);
+        await processValidSession(loadedSession, this.jwt);
+
+        return loadedSession;
     }
 }

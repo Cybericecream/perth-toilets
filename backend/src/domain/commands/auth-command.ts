@@ -17,3 +17,11 @@ export class LogoutCommand {
         validateString(sessionToken);
     }
 }
+
+export class ValidateSessionCommand {
+    constructor(
+        readonly sessionToken: string,
+    ) {
+        validateString(sessionToken);
+    }
+}

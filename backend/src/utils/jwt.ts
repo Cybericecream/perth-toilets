@@ -6,11 +6,9 @@ export class JwtVerify implements JwtInterface{
     constructor(private readonly jwtEnv: JwtEnvVariables) {
     }
 
-    generateSessionToken = (data, expiry: Date): string => {
-        const nowDate = new Date();
-        const expiryInSeconds = (expiry.getTime() - nowDate.getTime()) / 1000;
+    generateSessionToken = (data, expiry: number): string => {
         return sign({
-            exp: expiryInSeconds,
+            exp: expiry,
             data: data
         }, this.jwtEnv.jwtSalt);
     }

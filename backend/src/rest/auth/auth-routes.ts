@@ -30,8 +30,9 @@ export const authRoutes = async (authUserPasswordCommandHandler: AuthUserPasswor
 
     router.post("/logout", async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const {sessionToken} = req.body;
-            validateString(sessionToken);
+            const {authorization} = req.headers;
+            validateString(authorization);
+            const sessionToken = authorization.substr(7);
 
             const logoutCommand = new LogoutCommand(sessionToken);
             await authUserPasswordCommandHandler.handleLogout(logoutCommand);

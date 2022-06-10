@@ -1,4 +1,4 @@
 export interface JwtInterface {
-    generateSessionToken: (data, expiry: Date) => string;
+    generateSessionToken: (data, expiry: number) => string;
     verifySessionToken: (sessionToken: string) => any;
 }

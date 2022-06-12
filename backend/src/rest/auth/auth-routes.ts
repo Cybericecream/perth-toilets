@@ -53,7 +53,7 @@ export const authRoutes = async (authUserPasswordCommandHandler: AuthUserPasswor
             }, password)
             const signUpResponse = await authUserPasswordCommandHandler.handleSignUp(signUpCommand);
 
-            return res.status(200).json(signUpResponse);
+            return res.status(201).json(signUpResponse);
         } catch (err) {
             next(err);
         }

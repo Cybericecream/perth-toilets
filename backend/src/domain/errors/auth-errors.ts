@@ -31,6 +31,28 @@ export class NoSessionFound extends Error {
     }
 }
 
+export class ExistingUsername extends Error {
+    readonly name: string;
+
+    constructor(
+        message?: string
+    ) {
+        super(message);
+        this.name = this.constructor.name;
+    }
+}
+
+export class ExistingEmail extends Error {
+    readonly name: string;
+
+    constructor(
+        message?: string
+    ) {
+        super(message);
+        this.name = this.constructor.name;
+    }
+}
+
 export class DuplicatedUserPassword extends Error {
     readonly name: string;
 

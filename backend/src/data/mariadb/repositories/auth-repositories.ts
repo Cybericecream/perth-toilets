@@ -8,7 +8,13 @@ import {
     UserRole,
 } from "../../../domain/interfaces/auth-interfaces";
 import {UserRepository, UserSessionRepository} from "../../../domain/interfaces/auth-repository-interfaces";
-import {DuplicatedUserPassword, NoPasswordFound, NoSessionFound, NoUserFound} from "../../../domain/errors/auth-errors";
+import {
+    DuplicatedUserPassword, ExistingEmail,
+    ExistingUsername,
+    NoPasswordFound,
+    NoSessionFound,
+    NoUserFound
+} from "../../../domain/errors/auth-errors";
 import {Hasher} from "../../../domain/interfaces/hash-interface";
 
 export class AuthRepositories implements UserRepository, UserSessionRepository {
@@ -161,6 +167,12 @@ export class AuthRepositories implements UserRepository, UserSessionRepository {
 
             return userResponse.rows[0].user_id;
         } catch (err) {
+            if (err.constraint === "users_username_key") {
+                throw new ExistingUsername(err);
+            }
+            if (err.constraint === "users_email_key") {
+                throw new ExistingEmail(err);
+            }
             throw err;
         }
     }

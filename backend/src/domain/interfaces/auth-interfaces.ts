@@ -13,7 +13,7 @@ export interface LatestUserPassword {
 export interface UserPassword {
     userId: string,
     passwordHashed: string,
-    passwordVersion: Number,
+    passwordVersion?: number,
 }
 
 export interface LoginPasswordResponse {
@@ -22,20 +22,20 @@ export interface LoginPasswordResponse {
 }
 
 export interface User {
-    userId: string,
+    userId?: string,
     username: string,
     email: string,
     firstName: string,
     lastName: string,
-    userVersion: Number,
-    role: Role,
-    userRoleVersion: Number,
+    userVersion?: number,
+    role?: Role,
+    userRoleVersion?: number,
 }
 
 export interface UserRole {
     userId: string,
     role: Role,
-    userRoleVersion: Number,
+    userRoleVersion?: number,
 }
 
 export interface UserSession {

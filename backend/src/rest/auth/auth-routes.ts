@@ -1,6 +1,6 @@
 import {Router, Request, Response, NextFunction} from "express";
 import {AuthUserPasswordCommandHandler} from "../../domain/auth-command-handler";
-import {LoginCommand, LogoutCommand} from "../../domain/commands/auth-command";
+import {LoginCommand, LogoutCommand, SignUpCommand} from "../../domain/commands/auth-command";
 import {validateString} from "../../domain/utils/validate-values";
 
 export const authRoutes = async (authUserPasswordCommandHandler: AuthUserPasswordCommandHandler): Promise<Router> => {
@@ -19,7 +19,7 @@ export const authRoutes = async (authUserPasswordCommandHandler: AuthUserPasswor
         } catch (err) {
             next(err);
         }
-    })
+    });
 
     router.post("/logout", async (req: Request, res: Response, next: NextFunction) => {
         try {
@@ -34,7 +34,30 @@ export const authRoutes = async (authUserPasswordCommandHandler: AuthUserPasswor
         } catch (err) {
             next(err);
         }
-    })
+    });
+
+    router.post("/sign-up", async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const {username, email, password, firstName, lastName} = req.body;
+            validateString(username);
+            validateString(email);
+            validateString(password);
+            validateString(firstName);
+            validateString(lastName);
+
+            const signUpCommand = new SignUpCommand({
+                username: username,
+                email: email,
+                firstName: firstName,
+                lastName: lastName,
+            }, password)
+            const signUpResponse = await authUserPasswordCommandHandler.handleSignUp(signUpCommand);
+
+            return res.status(200).json(signUpResponse);
+        } catch (err) {
+            next(err);
+        }
+    });
 
     return router;
 }

@@ -1,19 +1,20 @@
 import {Ledger} from "../pool";
 import {
-    LatestUserPassword, NewUserSession,
+    LatestUserPassword,
+    NewUserSession,
+    Role,
     User,
     UserPassword,
     UserRole,
 } from "../../../domain/interfaces/auth-interfaces";
-import {
-    UserRepository,
-    UserSessionRepository
-} from "../../../domain/interfaces/auth-repository-interfaces";
+import {UserRepository, UserSessionRepository} from "../../../domain/interfaces/auth-repository-interfaces";
 import {DuplicatedUserPassword, NoPasswordFound, NoSessionFound, NoUserFound} from "../../../domain/errors/auth-errors";
+import {Hasher} from "../../../domain/interfaces/hash-interface";
 
 export class AuthRepositories implements UserRepository, UserSessionRepository {
     constructor(
         protected readonly ledger: Ledger,
+        protected readonly hash: Hasher,
     ) {
     }
 
@@ -37,6 +38,15 @@ export class AuthRepositories implements UserRepository, UserSessionRepository {
 
     saveUserPassword = async (userPassword: UserPassword): Promise<void> => {
         try {
+
+            if (userPassword.userId == undefined) {
+                userPassword.userId = this.hash.generateUuid();
+            }
+
+            if (userPassword.passwordVersion === undefined) {
+                userPassword.passwordVersion = 0;
+            }
+
             await this.ledger.connection.query(`
                         INSERT INTO postgres."perth-toilets".users_passwords
                             (password_id, password_value, user_id, password_version, created_at)
@@ -122,16 +132,34 @@ export class AuthRepositories implements UserRepository, UserSessionRepository {
         }
     }
 
-    saveUser = async (user: User): Promise<void> => {
+    saveUser = async (user: User): Promise<string> => {
         try {
-            await this.ledger.connection.query(`
+
+            if (user.userId == undefined) {
+                user.userId = this.hash.generateUuid();
+            }
+
+            if (user.userVersion === undefined) {
+                user.userVersion = 0;
+            }
+
+            const userVersion = user.userVersion + 1;
+
+            const userResponse = await this.ledger.connection.query(`
                         INSERT
                         INTO postgres."perth-toilets".users
                         (user_id, username, email, first_name, last_name, user_version, created_at)
                         VALUES ($1, $2, $3, $4, $5, $6, DEFAULT)
+                        RETURNING user_id
                 `,
-                [user.userId, user.username, user.email, user.firstName, user.lastName, user.userVersion]
+                [user.userId, user.username, user.email, user.firstName, user.lastName, userVersion]
             );
+
+            if (userResponse.rows.length === 0) {
+                throw new Error("Failed to create user.");
+            }
+
+            return userResponse.rows[0].user_id;
         } catch (err) {
             throw err;
         }
@@ -139,12 +167,22 @@ export class AuthRepositories implements UserRepository, UserSessionRepository {
 
     saveUserRole = async (userRole: UserRole): Promise<void> => {
         try {
+
+            console.log(userRole);
+
+            if (userRole.role === undefined) {
+                userRole.role = Role.generalUser;
+            }
+            if (userRole.userRoleVersion === undefined) {
+                userRole.userRoleVersion = 0;
+            }
+
             await this.ledger.connection.query(`
                         INSERT INTO postgres."perth-toilets".users_roles
                             (user_id, role, created_at, users_roles_version)
                         VALUES ($1, $2, DEFAULT, $3)
                 `,
-                [userRole.userId, userRole.role, userRole.userRoleVersion]
+                [userRole.userId, userRole.role, (userRole.userRoleVersion + 1)]
             )
         } catch (err) {
             throw err;

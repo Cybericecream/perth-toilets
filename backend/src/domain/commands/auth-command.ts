@@ -1,4 +1,5 @@
 import {validateString} from "../utils/validate-values";
+import {User} from "../interfaces/auth-interfaces";
 
 export class LoginCommand {
     constructor(
@@ -15,6 +16,19 @@ export class LogoutCommand {
         readonly sessionToken: string,
     ) {
         validateString(sessionToken);
+    }
+}
+
+export class SignUpCommand {
+    constructor(
+        readonly user: User,
+        readonly password: string,
+    ) {
+        validateString(user.email);
+        validateString(user.username);
+        validateString(user.firstName);
+        validateString(user.lastName);
+        validateString(password);
     }
 }
 

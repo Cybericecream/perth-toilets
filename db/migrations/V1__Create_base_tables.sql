@@ -7,7 +7,9 @@ CREATE TABLE users
     last_name    VARCHAR(128),
     user_version INTEGER      NOT NULL,
     created_at   TIMESTAMP    NOT NULL DEFAULT NOW(),
-    UNIQUE (user_id, user_version)
+    UNIQUE (user_id, user_version),
+    UNIQUE (username),
+    UNIQUE (email)
 );
 
 CREATE TABLE users_passwords

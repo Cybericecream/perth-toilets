@@ -186,9 +186,9 @@ export class AuthRepositories implements UserRepository, UserSessionRepository {
     updateUserSession = async (sessionToken: string, expiry: string): Promise<void> => {
         try {
             await this.ledger.connection.query(`
-                        UPDATE postgres."perth-toilets".users_session as users_session
-                        SET users_session.expires_at = $2
-                        WHERE users_session.session_token = $1;
+                        UPDATE postgres."perth-toilets".users_session
+                        SET expires_at = $2
+                        WHERE session_token = $1;
                 `,
                 [sessionToken, expiry]
             );

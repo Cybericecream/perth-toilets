@@ -32,7 +32,8 @@ export class AuthUserPasswordCommandHandler {
 
     handleValidSession = async (validateSessionCommand: ValidateSessionCommand): Promise<UserSession> => {
         const loadedSession = await this.sessionRepository.loadUserSession(validateSessionCommand.sessionToken);
-        await processValidSession(loadedSession, this.jwt);
+        const updatedSession = await processValidSession(loadedSession, this.jwt);
+        await this.sessionRepository.updateUserSession(updatedSession.sessionToken, updatedSession.expiry);
 
         return loadedSession;
     }

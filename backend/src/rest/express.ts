@@ -1,9 +1,10 @@
-import express, {Application, Request, Response} from "express";
+import express, {Application, Response} from "express";
 import {authRoutes} from "./auth/auth-routes";
 import {ServerEnvVariables} from "../utils/envValidator";
 import {AuthUserPasswordCommandHandler} from "../domain/auth-command-handler";
 import {errorHandler} from "./middleware/error-handler";
 import {userSession} from "./middleware/user-session";
+import {AuthRequest} from "../domain/interfaces/auth-interfaces";
 
 export const server = async (serverEnv: ServerEnvVariables, authUserPasswordCommandHandler: AuthUserPasswordCommandHandler) => {
     const app: Application = express();
@@ -14,9 +15,9 @@ export const server = async (serverEnv: ServerEnvVariables, authUserPasswordComm
 
     app.use(await userSession(authUserPasswordCommandHandler));
 
-    app.get("/", (req: Request, res: Response) => {
+    app.get("/", (req: AuthRequest, res: Response) => {
         console.log(req.headers);
-        res.status(200).json("Api Response");
+        res.status(200).json(`Api Response ${req.session.userId}`);
       });
 
     app.use(errorHandler);

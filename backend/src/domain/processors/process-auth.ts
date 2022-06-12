@@ -5,7 +5,7 @@ import {IncorrectPassword} from "../errors/auth-errors";
 import {JwtInterface} from "../interfaces/jwt-interface";
 
 // 28 Day Expiration
-const expiryTime = Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 28);
+const expiryTime = Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 7);
 
 export const processLogin = async (command: LoginCommand, user: User, latestUserPassword: LatestUserPassword, hash: Hasher, jwt: JwtInterface): Promise<NewUserSession> => {
     const newLoginPass = hash.hashPassword(command.password);
@@ -21,6 +21,12 @@ export const processLogin = async (command: LoginCommand, user: User, latestUser
     }
 }
 
-export const processValidSession = async (loadedSession: UserSession, jwt: JwtInterface): Promise<void> => {
+export const processValidSession = async (loadedSession: UserSession, jwt: JwtInterface): Promise<NewUserSession> => {
     jwt.verifySessionToken(loadedSession.sessionToken);
+
+    return {
+        userId: loadedSession.userId,
+        sessionToken: loadedSession.sessionToken,
+        expiry: expiryTime.toString(),
+    }
 }

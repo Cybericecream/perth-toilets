@@ -6,19 +6,42 @@ import {AuthRepositories} from "./data/mariadb/repositories/auth-repositories";
 import {Hash} from "./utils/hash";
 import {JwtVerify} from "./utils/jwt";
 import {SessionRepository} from "./data/mariadb/repositories/session-repositroy";
+import {SessionCommandHandler} from "./domain/session-command-handler";
+import {authRoutes} from "./rest/auth/auth-routes";
 
-const dbEnvVariables = new DbEnvValidator();
-const serverEnvVariables = new ServerEnvValidator();
-const jwtEnvVariables = new JetEnvValidator();
+try {
+    const dbEnvVariables = new DbEnvValidator();
+    const serverEnvVariables = new ServerEnvValidator();
+    const jwtEnvVariables = new JetEnvValidator();
 
-const hasher = new Hash();
+    const hasher = new Hash();
 
-const ledger = new Ledger(dbEnvVariables);
-const authRepositories = new AuthRepositories(ledger, hasher);
-const sessionRepositories = new SessionRepository(ledger);
+    const ledger = new Ledger(dbEnvVariables);
+    const authRepositories = new AuthRepositories(ledger, hasher);
+    const sessionRepositories = new SessionRepository(ledger);
 
-const jwt = new JwtVerify(jwtEnvVariables);
+    const jwt = new JwtVerify(jwtEnvVariables);
 
-const authUserPasswordCommandHandler = new AuthUserPasswordCommandHandler(authRepositories, sessionRepositories, hasher, jwt);
+    const sessionCommandHandler = new SessionCommandHandler(sessionRepositories, jwt);
+    const authUserPasswordCommandHandler = new AuthUserPasswordCommandHandler(authRepositories, sessionCommandHandler, hasher, jwt);
 
-server(serverEnvVariables, authUserPasswordCommandHandler);
+    const restServer = server();
+
+    restServer.run(serverEnvVariables, sessionCommandHandler, [
+        {
+            url: '/auth',
+            routeHandler: authRoutes(authUserPasswordCommandHandler),
+        },
+    ], []);
+
+    const endApi = async () => {
+        await restServer.stop();
+    }
+
+    process.on('SIGTERM', endApi);
+    process.on('SIGINT', endApi);
+    process.on('SIGHUP', endApi);
+} catch (err) {
+    console.log(err);
+    process.exit(0);
+}

@@ -1,10 +1,10 @@
 import {NextFunction, Response, Router} from "express";
 import {AuthRequest} from "../../domain/interfaces/auth-interfaces";
 import {validateString} from "../../domain/utils/validate-values";
-import {ValidateSessionCommand} from "../../domain/commands/auth-command";
-import {AuthUserPasswordCommandHandler} from "../../domain/auth-command-handler";
+import {ValidateSessionCommand} from "../../domain/commands/session-command";
+import {SessionCommandHandler} from "../../domain/session-command-handler";
 
-export const userSession = async (authUserPasswordCommandHandler: AuthUserPasswordCommandHandler) => {
+export const userSession = async (authUserPasswordCommandHandler: SessionCommandHandler) => {
     const router = Router();
 
     router.use(async (req: AuthRequest, res: Response, next: NextFunction) => {

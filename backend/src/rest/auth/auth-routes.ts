@@ -3,7 +3,7 @@ import {AuthUserPasswordCommandHandler} from "../../domain/auth-command-handler"
 import {LoginCommand, LogoutCommand, SignUpCommand} from "../../domain/commands/auth-command";
 import {validateString} from "../../domain/utils/validate-values";
 
-export const authRoutes = async (authUserPasswordCommandHandler: AuthUserPasswordCommandHandler): Promise<Router> => {
+export const authRoutes = (authUserPasswordCommandHandler: AuthUserPasswordCommandHandler): Router => {
     const router = Router()
 
     router.post("/login", async (req: Request, res: Response, next: NextFunction) => {

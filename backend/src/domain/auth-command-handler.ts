@@ -1,14 +1,16 @@
-import {UserRepository, UserSessionRepository} from "./interfaces/auth-repository-interfaces";
-import {LoginCommand, LogoutCommand, SignUpCommand, ValidateSessionCommand} from "./commands/auth-command";
-import {LoginPasswordResponse, UserSession} from "./interfaces/auth-interfaces";
-import {processLogin, processSession, processSignUp, processValidSession} from "./processors/process-auth";
+import {UserRepository} from "./interfaces/auth-repository-interfaces";
+import {LoginCommand, LogoutCommand, SignUpCommand} from "./commands/auth-command";
+import {LoginPasswordResponse} from "./interfaces/auth-interfaces";
+import {processLogin, processSession, processSignUp} from "./processors/process-auth";
 import {Hasher} from "./interfaces/hash-interface";
 import {JwtInterface} from "./interfaces/jwt-interface";
+import {SessionCommandHandler} from "./session-command-handler";
+import {RemoveSessionCommand, SaveSessionCommand} from "./commands/session-command";
 
 export class AuthUserPasswordCommandHandler {
     constructor(
         protected readonly userRepository: UserRepository,
-        protected readonly sessionRepository: UserSessionRepository,
+        protected readonly sessionCommandHandler: SessionCommandHandler,
         protected readonly hash: Hasher,
         protected readonly jwt: JwtInterface,
     ) {
@@ -18,7 +20,8 @@ export class AuthUserPasswordCommandHandler {
         const loadedUser = await this.userRepository.loadUserByEmail(loginCommand.email);
         const loadedLatestUserLogin = await this.userRepository.loadUserPassword(loadedUser.userId);
         const processedLogin = await processLogin(loginCommand, loadedUser, loadedLatestUserLogin, this.hash, this.jwt)
-        await this.sessionRepository.saveUserSession(processedLogin);
+        const newSession = new SaveSessionCommand(processedLogin.userId, processedLogin.sessionToken, processedLogin.expiry);
+        await this.sessionCommandHandler.handleSaveSession(newSession);
         return {
             sessionToken: processedLogin.sessionToken,
             user: loadedUser,
@@ -26,8 +29,8 @@ export class AuthUserPasswordCommandHandler {
     }
 
     handleLogout = async (logoutCommand: LogoutCommand): Promise<void> => {
-        await this.sessionRepository.loadUserSession(logoutCommand.sessionToken);
-        await this.sessionRepository.deleteUserSession(logoutCommand.sessionToken);
+        const removeSession = new RemoveSessionCommand(logoutCommand.sessionToken);
+        await this.sessionCommandHandler.handleRemoveSession(removeSession);
     }
 
     handleSignUp = async (signUpCommand: SignUpCommand): Promise<LoginPasswordResponse> => {
@@ -46,13 +49,5 @@ export class AuthUserPasswordCommandHandler {
             sessionToken: processedSession.sessionToken,
             user: signUpCommand.user,
         }
-    }
-
-    handleValidSession = async (validateSessionCommand: ValidateSessionCommand): Promise<UserSession> => {
-        const loadedSession = await this.sessionRepository.loadUserSession(validateSessionCommand.sessionToken);
-        const updatedSession = await processValidSession(loadedSession, this.jwt);
-        await this.sessionRepository.updateUserSession(updatedSession.sessionToken, updatedSession.expiry);
-
-        return loadedSession;
     }
 }

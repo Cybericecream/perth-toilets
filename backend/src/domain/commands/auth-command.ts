@@ -31,11 +31,3 @@ export class SignUpCommand {
         validateString(password);
     }
 }
-
-export class ValidateSessionCommand {
-    constructor(
-        readonly sessionToken: string,
-    ) {
-        validateString(sessionToken);
-    }
-}

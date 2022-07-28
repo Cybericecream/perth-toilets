@@ -1,5 +1,5 @@
 import {NextFunction, Response, Router} from "express";
-import {AuthRequest} from "../../domain/interfaces/auth-interfaces";
+import {AuthRequest} from "../../model/auth-interfaces";
 import {validateString} from "../../domain/utils/validate-values";
 import {ValidateSessionCommand} from "../../domain/commands/session-command";
 import {SessionCommandHandler} from "../../domain/session-command-handler";

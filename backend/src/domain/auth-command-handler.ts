@@ -1,9 +1,9 @@
-import {UserRepository} from "./interfaces/auth-repository-interfaces";
+import {UserRepository} from "../model/auth-repository-interfaces";
 import {LoginCommand, LogoutCommand, SignUpCommand} from "./commands/auth-command";
-import {LoginPasswordResponse} from "./interfaces/auth-interfaces";
+import {LoginPasswordResponse} from "../model/auth-interfaces";
 import {processLogin, processSession, processSignUp} from "./processors/process-auth";
-import {Hasher} from "./interfaces/hash-interface";
-import {JwtInterface} from "./interfaces/jwt-interface";
+import {Hasher} from "../model/hash-interface";
+import {JwtInterface} from "../model/jwt-interface";
 import {SessionCommandHandler} from "./session-command-handler";
 import {RemoveSessionCommand, SaveSessionCommand} from "./commands/session-command";
 

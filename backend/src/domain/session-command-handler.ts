@@ -1,8 +1,8 @@
-import {UserSessionRepository} from "./interfaces/auth-repository-interfaces";
+import {UserSessionRepository} from "../model/auth-repository-interfaces";
 import {RemoveSessionCommand, SaveSessionCommand, ValidateSessionCommand} from "./commands/session-command";
-import {UserSession} from "./interfaces/auth-interfaces";
+import {UserSession} from "../model/auth-interfaces";
 import {processValidSession} from "./processors/process-auth";
-import {JwtInterface} from "./interfaces/jwt-interface";
+import {JwtInterface} from "../model/jwt-interface";
 
 export class SessionCommandHandler {
     constructor(

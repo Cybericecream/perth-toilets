@@ -1,5 +1,5 @@
 import {sign, verify} from "jsonwebtoken";
-import {JwtInterface} from "../domain/interfaces/jwt-interface";
+import {JwtInterface} from "../model/jwt-interface";
 import {JwtEnvVariables} from "./envValidator";
 
 export class JwtVerify implements JwtInterface{

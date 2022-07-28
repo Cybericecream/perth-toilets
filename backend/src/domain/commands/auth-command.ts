@@ -1,5 +1,5 @@
 import {validateString} from "../utils/validate-values";
-import {User} from "../interfaces/auth-interfaces";
+import {User} from "../../model/auth-interfaces";
 
 export class LoginCommand {
     constructor(

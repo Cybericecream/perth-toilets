@@ -1,6 +1,6 @@
 import {Ledger} from "../pool";
-import {UserSessionRepository} from "../../../domain/interfaces/auth-repository-interfaces";
-import {NewUserSession} from "../../../domain/interfaces/auth-interfaces";
+import {UserSessionRepository} from "../../../model/auth-repository-interfaces";
+import {NewUserSession} from "../../../model/auth-interfaces";
 import {NoSessionFound} from "../../../domain/errors/auth-errors";
 
 export class SessionRepository implements UserSessionRepository {

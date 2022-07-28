@@ -24,11 +24,11 @@ export const server = () => {
             app.use(router.url, router.routeHandler);
         });
 
+        app.use(await userSession(sessionCommandHandler));
+
         authenticatedEndPoints.forEach((router) => {
             app.use(router.url, router.routeHandler);
         });
-
-        app.use('', await userSession(sessionCommandHandler));
 
         app.get("/", (req: AuthRequest, res: Response) => {
             console.log(req.headers);

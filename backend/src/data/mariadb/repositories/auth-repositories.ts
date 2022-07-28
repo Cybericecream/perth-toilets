@@ -5,8 +5,8 @@ import {
     User,
     UserPassword,
     UserRole,
-} from "../../../model/auth-interfaces";
-import {UserRepository} from "../../../model/auth-repository-interfaces";
+} from "../../../domain/model/auth-interfaces";
+import {UserRepository} from "../../../domain/model/auth-repository-interfaces";
 import {
     DuplicatedUserPassword, 
     ExistingEmail,
@@ -14,7 +14,7 @@ import {
     NoPasswordFound,
     NoUserFound
 } from "../../../domain/errors/auth-errors";
-import {Hasher} from "../../../model/hash-interface";
+import {Hasher} from "../../../domain/model/hash-interface";
 
 export class AuthRepositories implements UserRepository {
     constructor(

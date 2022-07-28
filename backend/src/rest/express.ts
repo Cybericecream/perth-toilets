@@ -1,7 +1,7 @@
 import express, {Application, Response, Router} from "express";
 import {ServerEnvVariables} from "../utils/envValidator";
 import {errorHandler} from "./middleware/error-handler";
-import {AuthRequest} from "../model/auth-interfaces";
+import {AuthRequest} from "../domain/model/auth-interfaces";
 import {userSession} from "./middleware/user-session";
 import {SessionCommandHandler} from "../domain/session-command-handler";
 

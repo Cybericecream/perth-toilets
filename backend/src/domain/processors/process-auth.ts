@@ -1,8 +1,8 @@
 import {LoginCommand, SignUpCommand} from "../commands/auth-command";
-import {LatestUserPassword, NewUserSession, User, UserSession} from "../../model/auth-interfaces";
-import {Hasher} from "../../model/hash-interface";
+import {LatestUserPassword, NewUserSession, User, UserSession} from "../model/auth-interfaces";
+import {Hasher} from "../model/hash-interface";
 import {IncorrectPassword} from "../errors/auth-errors";
-import {JwtInterface} from "../../model/jwt-interface";
+import {JwtInterface} from "../model/jwt-interface";
 
 // 7 Day Expiration
 const expiryTime = Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 7);

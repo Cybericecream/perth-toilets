@@ -1,6 +1,5 @@
 import {
     LatestUserPassword,
-    NewUser,
     NewUserSession,
     User,
     UserPassword,
